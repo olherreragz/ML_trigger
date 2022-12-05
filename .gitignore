@@ -1,0 +1,14 @@
+# --------------------------------------------
+# Python
+# --------------------------------------------
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Directories
+*/.ipynb_checkpoints/*
+
+# Files
+*small_tests.ipynb
+*algoparams_from_ui_original.json
+*draft.py
