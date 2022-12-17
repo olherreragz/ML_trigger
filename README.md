@@ -1,59 +1,73 @@
 # ML_trigger
 
-This repository contains code to trigger Machine Learnings steps from a ```json``` file, in an automated way, as part of a Screening Test for a DS internship.
+This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered from a ```json``` file that contains the details of every step.
 
-The algorithm implements a *"Template method"* design pattern. The superclass, where the skeleton for the whole procedure is defined, is ```Process abstract class``` in ```Process.py```.
+The algorithm implements a *"Template method"* design pattern. The super-class of the design pattern, where the framework for the whole procedure is defined, is ```Process abstract class``` in ```Process.py```.
 
 ## Code execution
 ___
 
-**The code is executable from console, running ```main.py```.** All processes are triggered with the execution of that file.
+**The code is executable from console, running ```main.py```.** All sub-processes are triggered from this execution.
 
-```Python``` files, ```csv``` files and ```json``` inputs should be in the same directory as ```main.py```.
-
-In the GitHub repository, files are not stored in other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators. 
+Python files, csv files and ```json``` inputs should be in the same directory as ```main.py```.
 
 For further explanation of the code, please read the sections below.
+
+*PD: Code files in GitHub repository are not stored inside of other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators.*
 
 ## Code explanation
 ___
 
 ### **```Trigger.py```**
 
-```Trigger class``` contains the whole process. It stores key attributes and instantiates ```Process sub-classes``` according *to the type of regression to be run*.
-- ```Trigger class``` read the json file specified in line ```line 5```  of ```main.py```.
-  - If you want to try execution of the code with another ```json```, you just have to change the path given in this line.
-- After reading the ```json```, the ```Trigger class``` read the ```csv``` file specified in the ```json```.
-- Then, ```Trigger class``` read the type of predictive algorithm specified in the ```json``` (for example, *"Classification"*, *"Clustering"* or *"Regression"*) and it initializes the proper processes.
-  - Here you can see the main *"Template method"* placed in. For any given main process, a different sub-class will be initialized.
-- Finally, **it triggers the process initialized** in the previous phase.
+```Trigger class``` is the **highest abstraction layer** for the execution of the session. This class stores key attributes, and according to them, it instantiates ```Process abc``` sub-classes for each specific *type of regression to be run*.
+
+#### Details of the class:
+
+- ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
+  - <span style="color: #30a44c
+;">**For code execution with other json files, relative path change is needed in this section.</span>**
+- After reading the json file, ```Trigger class``` read the csv file specified as json argument for data location.
+- After reading the csv, ```Trigger class``` read the type of predictive algorithm specified in json. For example, *"Classification"*, *"Clustering"* or *"Regression"*. Then, the appropiate process is initialized.
+  - The main *"Template method"* placed in, starts working. For any given main process, a different sub-class will be initialized.
+- Finally, **```Trigger class``` starts the execution of the predictive algorithm**.
 
 ### **```Process.py```**
 
-This file contains the abstract class of the *"Template method"* and the sub-classes that implamentates the sequence of steps to be applied over the data.
+This file implements the *"Template Method"* abstract class and its sub-classes that contain the sequence of steps to be applied to the data.
 
-Because only one ```json``` example containing regression steps was given, only a sub-class for regressions, called ```Regression_process```, was implementated (we don't know what specific formats will be given in ```json``` x, y, z fields).
+Only one ```json``` example was provided that contained regression steps. Therefore, only one of the three sub-classes of ```Process abc``` was implemented. Specifically, the ```Regression_process``` sub-class.
 
-The ```Process class``` has methods with **default implamentations that are very likely to never suffer changes**:
-  - ```trigger_steps()```: generic instruction to start executing a sequence of steps that won't change. Is the actions inside every step what it's very likely to change according to the type of algorithm running.
-  - ```read_target()```: in supervised learning, a ```Pandas.Series()``` vector to predict will always be uploaded to RAM through this method. However, this functionality it's easily extensible for *"Clustering"* algorithms through overriding  in a ```Clustering_process sub-class```.
-  - ```feature_handling()```: no matter what the algorithm is, there always will be a phase where features will be processed.
+<!-- Revisar -->
+This is because specific formats that might be given for certain json values, are unknown. For example, ```optomize_model_hyperparameters_for```, ```optimize_threshold_for``` and ```model_name```, are not parameter arguments of any function of the ```scikit-learn``` library. Therefore, it is assumed that they correspond to organization-specific parameters.
+
+#### Details of the abstract class:
+
+```Process class``` has methods with **default implamentations that are very likely to never suffer changes**:
+  - ```trigger_steps()```: generic instruction to start executing steps.
+  - ```read_target()```: in supervised learning, a ```Pandas.Series()``` vector to predict will always be uploaded to RAM. However, this functionality it's easily extensible for *"Clustering"* algorithms through overriding.
+  - ```feature_handling()```: phase where features will be manipulated.
 
 ### **```FeatureHandling.py```**
 
-Another *"Template method"* design pattern is placed in to make the code more friendly to read and more friendly to extend to another data types like categorical, timing and boolean variables.
+<!-- Revisar -->
 
-This phase of the process contains several steps that can vary one from another depending if the feature is numerical or textual.
+Each attribute must be handled. This is delegated to ```FeatureHandling class```, implemented in this file.
 
-The main class is ```FeatureHandling abstract class```. Aside from other fine details, the entire working ```DataFrame``` is received in the ```__init__()``` method, because of ```missing_values_treatment()``` and ```make_derived_feats()``` sub-processes.
-  - If the treatment to apply is to drop all rows with missing values, then this will not only affect the vector of the handled feature, but will affect the entire ```DataFrame```.
-  - Also, if ```make_derived_feats()``` generates new features this will affect the entire ```DataFrame``` as well.
+This phase of the process contains several steps that can vary depending if the feature is numerical or textual. Another *"Template method"* design pattern was placed in to separate the different types of sub-processes and to make the code more easily extensible for other data types. For example, categorical, timing and boolean variables.
 
-The sub-classes implementated are:
+The main class is ```FeatureHandling abstract class```. The sub-classes of the *"template method"* implemented are:
   - ```NumericalHandling```
   - ```TextualHandling```
 
-## Assumptions and considerations
+In addition to other fine details, the entire data frame is received in the initializer method due to implications of ```missing_values_treatment()``` and ```make_derived_feats()``` numerical sub-processes.
+  - If the missing values treatment to apply is to drop rows, then this will not only affect the vector of the handled feature, but will affect vectors of the entire ```DataFrame```.
+  - Also, if ```make_derived_feats()``` generates new features this will affect the entire ```DataFrame``` as well.
+
+Consequently, for each feature sub-process the whole dataframe must be treated.
+
+
+## General assumptions and considerations
 ___
 
 - It is assumed that the algorithm will provide an automated way to trigger Machine Learning processes *for three main types of predictive algorithms*:
@@ -61,9 +75,9 @@ ___
   - Classification
   - Clustering
 
-  In the absence of json examples for "Classification" and "Clustering", the algorithm implements and initialize the process only for "Regressions", but the code it's easily extensible for other types of predictive algorithms.
+  As mentioned before, in the absence of json examples for "Classification" and "Clustering", the code implements and initialize the process only for "Regressions", but the code it's easily extensible for other types of predictive algorithms.
 
-- Consider that at the inside of the ```json``` file provided, specifically, in the ```algoparams_from_ui.json["design_state_data"]["session_info"]``` dictionary, the following information was given:
+- Consider that at the inside of the json file provided, in the ```algoparams_from_ui.json["design_state_data"]["session_info"]``` node, the following information was given:
 
   ```
       "session_info" : {
@@ -76,7 +90,11 @@ ___
   ```
 
   However, no ```iris_modified.csv``` file was provided.
-  For locally testing reasons, this section of the ```json``` file in the Github repository was replaced for ```"iris.csv"```. Nonetheless, for new ```json``` files to be tested, any csv-filename should be read successfully, as long as the ```json``` indicates the csv-filename correctly. The only requirements are:
+
+  <!-- Revisar -->
+  For locally testing reasons, this section of the json file was replaced for ```"iris.csv"```. The json in the Github repository corresponds to this version.
+  
+  Nonetheless, for new json files to be tested, any csv-filename should be read successfully. The only requirements are:
 
   - Locally, the ```.csv``` extension file exists and it's stored in the same directory as the code.
   - **It is assumed that the ```json``` will always handle over a relative path,** with its root placed in the same directory where the code is stored.

@@ -14,20 +14,14 @@ class Process(ABC):
 
     # Initializer
     @abstractmethod
-    def __init__(
-        self,
-        ml_steps,
-        data_df,
-    ):
+    def __init__(self, ml_steps, data_df):
         self.ml_steps = ml_steps
         self.df = data_df
         return
 
     "ML steps trigger"
     # @abstractmethod
-    def trigger_steps(
-        self,
-    ):
+    def trigger_steps(self):
         "Step 1"
         self.read_target()
         "Step 2"
@@ -37,6 +31,7 @@ class Process(ABC):
     "Step 1: Read the target"
     # @abstractmethod
     def read_target(self):
+        # Reading and storing
         self.y_target = self.df[self.ml_steps["design_state_data"]["target"]["target"]]
 
     "Step 2.0"
@@ -50,25 +45,26 @@ class Process(ABC):
 
         for feature in features:
 
-            f_dtype_to_read = (
+            correct_datatype = (
                 self.ml_steps["design_state_data"]["feature_handling"][feature][
                     "feature_variable_type"
                     ]
             )
-            f_dtype_read = str(self.df[feature].dtype)
 
-            if f_dtype_to_read == "numerical":
+            datatype_read = str(self.df[feature].dtype)
+
+            if correct_datatype == "numerical":
                 handler = NumericalHandling(
                     feature,
-                    self.df,
-                    f_dtype_read,
                     self.ml_steps["design_state_data"]["feature_handling"][feature][
                         "feature_details"
-                        ],
+                        ],  # steps details of the handling sub-process
+                    self.df,
+                    datatype_read,
                 )
                 self.df = handler.handle()
 
-            elif f_dtype_to_read == "text":
+            elif correct_datatype == "text":
                 pass
 
             # Feature selection
