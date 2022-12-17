@@ -1,45 +1,48 @@
 # ML_trigger
 
-This repository contains code to trigger Machine Learnings steps programatically, in an automated way from a ```json``` file, as part of a Screening Test for a DS internship.
+This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered from a ```json``` file that contains the details of every step.
 
-The algorithm implements a *"Template method"* design pattern. The superclass, where the skeleton for the whole procedure is defined, is ```Process abstract class``` in ```Process.py```.
+The algorithm implements a *"Template method"* design pattern. The superclass of the design pattern, where the procedure framework is defined, is ```Process abstract class``` in ```Process.py```.
 
 ## Code execution
 ___
 
-**The code is executable from console, running ```main.py```.** All processes are triggered with this execution.
+**The code is executable from console, running ```main.py```.** All sub-processes are triggered from this execution.
 
 Python files, csv files and ```json``` inputs should be in the same directory as ```main.py```.
 
-In the GitHub repository, files are not stored in other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators. 
-
 For further explanation of the code, please read the sections below.
+
+*PD: Code files in GitHub repository are not stored inside of other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators.*
 
 ## Code explanation
 ___
 
 ### **```Trigger.py```**
 
-```Trigger class``` contains the whole process. It stores key attributes and instantiates ```Process class``` sub-classes, according *to the type of regression to be run*.
+```Trigger class``` contains the **highest abstraction layer for the execution** of the machine learning session. This class stores key attributes, and according to them, it instantiates ```Process abc``` sub-classes for each specific *type of regression to be run*.
 
-#### Explanation of the class:
+#### Details of the class:
 
-- ```Trigger class``` read the json file specified in line ```line 5```  of ```main.py```.
-  - If you want to try execution of the code with another json file, you just have to change the relative path given in this line.
-- After reading the json file, the ```Trigger class``` read the ```csv``` file specified in json as argument parameter.
-- Then, ```Trigger class``` read the type of predictive algorithm specified in the json (for example, *"Classification"*, *"Clustering"* or *"Regression"*) and it initializes the proper processes.
-  - Her, you can see working the main *"Template method"* placed in. For any given main process, a different sub-class will be initialized.
-- Finally, **```Trigger class``` triggers the execution of process initialized** in the previous phase.
+- ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
+  - <span style="color: #30a44c
+;">**For code execution with other json files, changing the relative path given in this section is needed.</span>**
+- After reading the json file, ```Trigger class``` read the ```csv``` file specified in json, as argument parameter for data location.
+- Then, ```Trigger class``` read the type of predictive algorithm specified in json (for example, *"Classification"*, *"Clustering"* or *"Regression"*) and the proper process is initialized.
+  - Here you can see working the main *"Template method"* placed in. For any given main process, a different sub-class will be initialized.
+- Finally, **```Trigger class``` starts the execution of the process initialized**.
 
 ### **```Process.py```**
 
-This file contains the abstract class of the *"Template method"* and the sub-classes that implamentates the sequence of steps to be applied over the data.
+This file contains the abstract class of the *"Template method"* and the sub-classes with the sequence of steps to be applied over the data.
 
-Because only one ```json``` example containing regression steps was given, only a sub-class for regressions, called ```Regression_process```, was implementated (we don't know what specific formats will be given in ```json``` x, y, z fields).
+Because only one ```json``` example containing regression steps was given, only one sub-class of ```Process abc``` was implementated. ... it's called ```Regression_process```. <!-- Revisar --> Specific formats of fields that could be given. such as ... filds, are not known.
 
-The ```Process class``` has methods with **default implamentations that are very likely to never suffer changes**:
-  - ```trigger_steps()```: generic instruction to start executing a sequence of steps that won't change. Is the actions inside every step what it's very likely to change according to the type of algorithm running.
-  - ```read_target()```: in supervised learning, a ```Pandas.Series()``` vector to predict will always be uploaded to RAM through this method. However, this functionality it's easily extensible for *"Clustering"* algorithms through overriding  in a ```Clustering_process sub-class```.
+#### Details of the abstract class:
+
+```Process class``` has methods with **default implamentations that are very likely to never suffer changes**:
+  - ```trigger_steps()```: generic instruction to start executing the sequence of steps.
+  - ```read_target()```: in supervised learning, a ```Pandas.Series()``` vector to predict will always be uploaded to RAM. However, this functionality it's easily extensible for *"Clustering"* algorithms through overriding.
   - ```feature_handling()```: no matter what the algorithm is, there always will be a phase where features will be processed.
 
 ### **```FeatureHandling.py```**
