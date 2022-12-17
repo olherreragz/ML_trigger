@@ -7,9 +7,9 @@ The algorithm implements a *"Template method"* design pattern. The superclass, w
 ## Code execution
 ___
 
-**The code is executable from console, running ```main.py```.** All processes are triggered with the execution of that file.
+**The code is executable from console, running ```main.py```.** All processes are triggered with this execution.
 
-```Python``` files, ```csv``` files and ```json``` inputs should be in the same directory as ```main.py```.
+Python files, csv files and ```json``` inputs should be in the same directory as ```main.py```.
 
 In the GitHub repository, files are not stored in other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators. 
 
@@ -20,13 +20,13 @@ ___
 
 ### **```Trigger.py```**
 
-```Trigger class``` contains the whole process. It stores key attributes and instantiates ```Process sub-classes``` according *to the type of regression to be run*.
+```Trigger class``` contains the whole process. It stores key attributes and instantiates ```Process class``` sub-classes, according *to the type of regression to be run*.
 - ```Trigger class``` read the json file specified in line ```line 5```  of ```main.py```.
-  - If you want to try execution of the code with another ```json```, you just have to change the path given in this line.
-- After reading the ```json```, the ```Trigger class``` read the ```csv``` file specified in the ```json```.
-- Then, ```Trigger class``` read the type of predictive algorithm specified in the ```json``` (for example, *"Classification"*, *"Clustering"* or *"Regression"*) and it initializes the proper processes.
-  - Here you can see the main *"Template method"* placed in. For any given main process, a different sub-class will be initialized.
-- Finally, **it triggers the process initialized** in the previous phase.
+  - If you want to try execution of the code with another json file, you just have to change the relative path given in this line.
+- After reading the json file, the ```Trigger class``` read the ```csv``` file specified in json as argument parameter.
+- Then, ```Trigger class``` read the type of predictive algorithm specified in the json (for example, *"Classification"*, *"Clustering"* or *"Regression"*) and it initializes the proper processes.
+  - Here, you can see working the main *"Template method"* placed in. For any given main process, a different sub-class will be initialized.
+- Finally, **it triggers the execution of process initialized** in the previous phase.
 
 ### **```Process.py```**
 
