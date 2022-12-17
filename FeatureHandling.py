@@ -11,11 +11,11 @@ class FeatureHandling(ABC):
 
     # Initializer
     @abstractmethod
-    def __init__(self, feature, data, feature_data_type_read, details):
+    def __init__(self, feature, details, data, feature_data_type_read):
         self.feature = feature
+        self.details = details
         self.data = data
         self.feature_data_type_read = feature_data_type_read
-        self.details = details
 
     @abstractmethod
     def datatype_checking(self):
