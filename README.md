@@ -26,11 +26,12 @@ ___
 
 - ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
   - <span style="color: #30a44c
-;">**For code execution with other json files, relative path change is needed in this section.</span>**
-- After reading the json file, ```Trigger class``` read the csv file specified as json argument for data location.
+;">**For code execution with other json files, relative path change in this section is needed.</span>**
+- After reading the json file, ```Trigger class``` read the csv file specified for data location.
 - After reading the csv, ```Trigger class``` read the type of predictive algorithm specified in json. For example, *"Classification"*, *"Clustering"* or *"Regression"*. Then, the appropiate process is initialized.
-  - The main *"Template method"* placed in, starts working. For any given main process, a different sub-class will be initialized.
+  - The main *"Template method"* placed in, starts working here. For any given main process, a different sub-class will be initialized.
 - Finally, **```Trigger class``` starts the execution of the predictive algorithm**.
+  - The execution is implemented in ```Process.trigger_steps()```.
 
 ### **```Process.py```**
 
