@@ -4,25 +4,18 @@ from abc import ABC, abstractmethod
 class FeatureHandling(ABC):
 
     # Attributes:
-    #   details: dict
     #   feature: string
+    #   details: dict
     #   data: Pandas.Series()
-    #   f_dtype_read: string
+    #   feature_data_type_read: string
 
     # Initializer
     @abstractmethod
-    def __init__(
-        self,
-        feature,
-        data,
-        f_dtype_read,
-        details,
-    ):
+    def __init__(self, feature, data, feature_data_type_read, details):
         self.feature = feature
         self.data = data
-        self.f_dtype_read = f_dtype_read
+        self.feature_data_type_read = feature_data_type_read
         self.details = details
-        self.datatype_checking()
 
     @abstractmethod
     def datatype_checking(self):
@@ -40,6 +33,7 @@ class NumericalHandling(FeatureHandling):
 
     "Trigger of the sub-process"
     def handle(self):
+        self.datatype_checking()
         self.missing_values_treatment()
         self.numerical_handling()
         self.rescaling()
@@ -48,43 +42,49 @@ class NumericalHandling(FeatureHandling):
 
     "Correct datatype validation"
     def datatype_checking(self):
-        if ('float' in self.f_dtype_read or
-                'int' in self.f_dtype_read):
-            print(f"correct format read for: {self.feature}")
+        if ('float' in self.feature_data_type_read or
+                'int' in self.feature_data_type_read):
+            print(f"correct format read for: {self.feature}")  # Revisar
         else:
             print("incorrect format read")
             self.data[self.feature] = self.data[self.feature].astype('float64')
             print(f"format corrected for: {self.feature}")
+        return
 
     def missing_values_treatment(self):
         treatment = self.details["missing_values"]
         impute_with = self.details["impute_with"]
 
         if treatment == 'Impute' and impute_with == "Average of values":
-            print(f"Executing missing value imputation for: {self.feature}")
             self.data[self.feature] = self.data[self.feature].fillna(
                 self.data[self.feature].mean()
                 )
+            print(f"Missing value imputation executed for: {self.feature}")
 
         elif treatment == 'Impute' and impute_with == "custom":
-            print(f"Executing missing value imputation for: {self.feature}")
+            # Revisar y probablemente, cambiar
             impute_value = self.details["impute_value"]
             self.data[self.feature] = self.data[self.feature].fillna(impute_value)
+            print(f"Missing value imputation executed for: {self.feature}")
+        return
 
     def numerical_handling(self):
         numerical_handling = self.details["numerical_handling"]
         if numerical_handling == "Keep as regular numerical feature":
             pass
+        return
 
     def rescaling(self):
         rescaling = self.details["rescaling"]
         if rescaling == "No rescaling":
             pass
+        return
 
     def make_derived_feats(self):
         make_derived_feats = self.details["make_derived_feats"]
         if not make_derived_feats:
             pass
+        return
 
 
 class TextHandling(FeatureHandling):
@@ -99,9 +99,10 @@ class TextHandling(FeatureHandling):
 
     "Correct datatype validation"
     def datatype_checking(self):
-        if self.f_dtype_read == 'object':
-            print(f"correct format read for: {self.feature}")
+        if self.feature_data_type_read == 'object':
+            print(f"correct format read for: {self.feature}")  # Revisar
         else:
             print("incorrect format read")
             self.data[self.feature] = self.data[self.feature].astype('object')
             print(f"format corrected for: {self.feature}")
+        return
