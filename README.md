@@ -26,8 +26,8 @@ ___
 
 - ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
   - <span style="color: #30a44c
-;">**For code execution with other json files, relative path change in this section is needed.</span>**
-- After reading the json file, ```Trigger class``` read the csv file specified for data location.
+;">**For code execution with other json files, path change in this section is needed.</span>**
+- After reading the json file, ```Trigger class``` read the csv file specified in json for data location.
 - After reading the csv, ```Trigger class``` read the type of predictive algorithm specified in json. For example, *"Classification"*, *"Clustering"* or *"Regression"*. Then, the appropiate process is initialized.
   - The main *"Template method"* placed in, starts working here. For any given main process, a different sub-class will be initialized.
 - Finally, **```Trigger class``` starts the execution of the predictive algorithm**.
@@ -37,27 +37,25 @@ ___
 
 This file implements the *"Template Method"* abstract class and its sub-classes that contain the sequence of steps to be applied to the data.
 
-Only one ```json``` example was provided that contained regression steps. Therefore, only one of the three sub-classes of ```Process abc``` was implemented. Specifically, the ```Regression_process``` sub-class.
+Only one ```json``` example was provided. Therefore, only one of the three sub-classes of ```Process abc``` was implemented. Specifically, the provided json contained regression steps, so the sub-class fully constructed was ```Regression_process```.
 
 <!-- Revisar -->
-This is because specific formats that might be given for certain json values, are unknown. For example, ```optomize_model_hyperparameters_for```, ```optimize_threshold_for``` and ```model_name```, are not parameter arguments of any function of the ```scikit-learn``` library. Therefore, it is assumed that they correspond to organization-specific parameters.
+This is because specific formats that might be given for certain json values, are unknown. For example, ```optomize_model_hyperparameters_for```, ```optimize_threshold_for``` and ```model_name```, are not parameter arguments of any function of ```scikit-learn``` library. Therefore, it is assumed that they correspond to organization-specific parameters.
 
 #### Details of the abstract class:
 
 ```Process class``` has methods with **default implamentations that are very likely to never suffer changes**:
   - ```trigger_steps()```: generic instruction to start executing steps.
   - ```read_target()```: in supervised learning, a ```Pandas.Series()``` vector to predict will always be uploaded to RAM. However, this functionality it's easily extensible for *"Clustering"* algorithms through overriding.
-  - ```feature_handling()```: phase where features will be manipulated.
+  - ```feature_handling()```: phase in which features are manipulated.
 
 ### **```FeatureHandling.py```**
 
-<!-- Revisar -->
+Each attribute must be handled. This is delegated to ```FeatureHandling class``` implemented in this file.
 
-Each attribute must be handled. This is delegated to ```FeatureHandling class```, implemented in this file.
+This phase of the process contains several steps that can vary depending if the feature is numerical or textual. Another *"Template method"* design pattern was placed in to separate different types of sub-processes and to make the code more easily extensible for other data types. For example, categorical, timing and boolean variables.
 
-This phase of the process contains several steps that can vary depending if the feature is numerical or textual. Another *"Template method"* design pattern was placed in to separate the different types of sub-processes and to make the code more easily extensible for other data types. For example, categorical, timing and boolean variables.
-
-The main class is ```FeatureHandling abstract class```. The sub-classes of the *"template method"* implemented are:
+The main class of the *"template method"* is ```FeatureHandling abstract class``` and the sub-classes are:
   - ```NumericalHandling```
   - ```TextualHandling```
 
@@ -65,7 +63,7 @@ In addition to other fine details, the entire data frame is received in the init
   - If the missing values treatment to apply is to drop rows, then this will not only affect the vector of the handled feature, but will affect vectors of the entire ```DataFrame```.
   - Also, if ```make_derived_feats()``` generates new features this will affect the entire ```DataFrame``` as well.
 
-Consequently, for each feature sub-process the whole dataframe must be treated.
+Consequently, for each feature sub-process the whole data frame must be treated.
 
 
 ## General assumptions and considerations
@@ -76,10 +74,11 @@ ___
   - Classification
   - Clustering
 
-  As mentioned before, in the absence of json examples for "Classification" and "Clustering", the code implements and initialize the process only for "Regressions", but the code it's easily extensible for other types of predictive algorithms.
+  As mentioned before, in the absence of json examples for "Classification" and "Clustering" algorithms, the code implements the process only for "Regressions", but the code it's easily extensible for other types of predictive algorithms.
 
 - Consider that at the inside of the json file provided, in the ```algoparams_from_ui.json["design_state_data"]["session_info"]``` node, the following information was given:
 
+<!-- Revisar -->
   ```
       "session_info" : {
         "project_id": "1",
@@ -99,6 +98,10 @@ ___
 
   - Locally, the ```.csv``` extension file exists and it's stored in the same directory as the code.
   - **It is assumed that the ```json``` will always handle over a relative path,** with its root placed in the same directory where the code is stored.
+
+<!-- Revisar -->
+- The organization-specific parameters and arguments assumed are:
+  - ...
 
 ## Dependencies
 ___
