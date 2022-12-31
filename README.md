@@ -1,8 +1,8 @@
 # ML_trigger
 
-This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered from a ```json``` file that contains the details of every step.
+This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered after reading a ```json``` file that contains the details of every step.
 
-The algorithm implements a *"Template method"* design pattern. The super-class of the design pattern, where the framework for the whole procedure is defined, is ```Process abstract class``` in ```Process.py```.
+The algorithm implements a *"Template method"* design pattern. The super-class of the design pattern is ```Process abstract class``` in ```Process.py```.
 
 ## Code execution
 ___
@@ -16,17 +16,17 @@ ___
 
 ### **```Trigger.py```**
 
-```Trigger class``` is the **highest abstraction layer** for the execution. This class stores key attributes and it instantiates ```Process``` sub-classes for each specific *type of regression to be run*, according to the key attributes stored.
+```Trigger class``` is the **highest abstraction layer** for the execution. This class stores key attributes and it instantiates the appropiate ```Process abc``` sub-classes, according to the attributes stored.
 
-#### Details of the class:
+#### Details of ```Trigger class```:
 
 - ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
   - <span style="color: #30a44c
-;">**For code execution with other json files, path change in this section is needed.</span>**
-- After reading the json file, ```Trigger class``` read the csv file specified in json.
-- After reading csv, ```Trigger class``` read the type of predictive algorithm to be run (*"Classification"*, *"Clustering"* or *"Regression"*). Then, the appropiate process is initialized.
-  - The main *"Template method"* placed in, starts working here <!-- Revisar -->. For any given main process, a different sub-class will be initialized.
-- Finally, **```Trigger class``` starts the execution <!-- Revisar --> of the predictive algorithm by running ```Process.trigger_steps()```**.
+;">**For code execution with other json files, change the path.</span>**
+- After reading the json file, ```Trigger class``` reads the csv file specified in ```json```.
+- Next, ```Trigger class``` reads the type of predictive algorithm to be run (*"Classification"*, *"Clustering"* or *"Regression"*). Then, the appropiate process is initialized.
+  - Because of the main *"Template method"* placed in, for any given algorithm a different sub-class will be initialized.
+- Finally, ```Trigger class``` starts the execution <!-- Revisar --> of the predictive algorithm by running ```Process.trigger_steps()``` method.
 
 ### **```Process.py```**
 
