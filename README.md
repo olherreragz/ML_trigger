@@ -11,36 +11,31 @@ ___
 
 Python files, csv files and ```json``` inputs should be in the same directory as ```main.py```.
 
-For further explanation of the code, please read the sections below.
-
-*PD: Code files in GitHub repository are not stored inside of other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators.*
-
 ## Code explanation
 ___
 
 ### **```Trigger.py```**
 
-```Trigger class``` is the **highest abstraction layer** for the execution of the session. This class stores key attributes, and according to them, it instantiates ```Process abc``` sub-classes for each specific *type of regression to be run*.
+```Trigger class``` is the **highest abstraction layer** for the execution. This class stores key attributes and it instantiates ```Process``` sub-classes for each specific *type of regression to be run*, according to the key attributes stored.
 
 #### Details of the class:
 
 - ```Trigger class``` read the json file specified in ```line 5```, ```main.py```.
   - <span style="color: #30a44c
 ;">**For code execution with other json files, path change in this section is needed.</span>**
-- After reading the json file, ```Trigger class``` read the csv file specified in json for data location.
-- After reading the csv, ```Trigger class``` read the type of predictive algorithm specified in json. For example, *"Classification"*, *"Clustering"* or *"Regression"*. Then, the appropiate process is initialized.
-  - The main *"Template method"* placed in, starts working here. For any given main process, a different sub-class will be initialized.
-- Finally, **```Trigger class``` starts the execution of the predictive algorithm**.
-  - The execution is implemented in ```Process.trigger_steps()```.
+- After reading the json file, ```Trigger class``` read the csv file specified in json.
+- After reading csv, ```Trigger class``` read the type of predictive algorithm to be run (*"Classification"*, *"Clustering"* or *"Regression"*). Then, the appropiate process is initialized.
+  - The main *"Template method"* placed in, starts working here <!-- Revisar -->. For any given main process, a different sub-class will be initialized.
+- Finally, **```Trigger class``` starts the execution <!-- Revisar --> of the predictive algorithm by running ```Process.trigger_steps()```**.
 
 ### **```Process.py```**
 
-This file implements the *"Template Method"* abstract class and its sub-classes that contain the sequence of steps to be applied to the data.
+This file implements the *"Template Method"* abstract class and its sub-classes containing the sequence of steps to be applied to the data.
 
 Only one ```json``` example was provided. Therefore, only one of the three sub-classes of ```Process abc``` was implemented. Specifically, the provided json contained regression steps, so the sub-class fully constructed was ```Regression_process```.
 
 <!-- Revisar -->
-This is because specific formats that might be given for certain json values, are unknown. For example, ```optomize_model_hyperparameters_for```, ```optimize_threshold_for``` and ```model_name```, are not parameter arguments of any function of ```scikit-learn``` library. Therefore, it is assumed that they correspond to organization-specific parameters.
+This is because specific formats that might be given for certain json values, are unknown. For example, ```optomize_model_hyperparameters_for```, ```optimize_threshold_for``` and ```model_name```, are not parameter arguments of any function of ```scikit-learn``` library. Therefore, it is assumed that they correspond to organization-specific argument parameters.
 
 #### Details of the abstract class:
 
@@ -68,6 +63,8 @@ Consequently, for each feature sub-process the whole data frame must be treated.
 
 ## General assumptions and considerations
 ___
+
+- Code files in GitHub repository are not stored inside of other directories (and therefore, organizing it better) to facilitate testing procedures to evaluators.
 
 - It is assumed that the algorithm will provide an automated way to trigger Machine Learning processes *for three main types of predictive algorithms*:
   - Regression
