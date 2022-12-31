@@ -1,6 +1,6 @@
 # ML_trigger
 
-This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered after reading a ```json``` file that contains the details of every step.
+This repository contains code to trigger Machine Learnings steps programatically,  as part of a Screening Test for a DS internship. Steps are automatically triggered after reading a ```json``` file containing details of every step.
 
 The algorithm implements a *"Template method"* design pattern. The super-class of the design pattern is ```Process abstract class``` in ```Process.py```.
 
